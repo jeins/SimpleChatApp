@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.TotalRoleTitle = "Total Roles";
+    ViewBag.TotalUserTitle = "Total Users";
+}
+<div class="col-xs-6">
+    <div class="info-box">
+        <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
+
+        <div class="info-box-content">
+            <span class="info-box-text">@ViewBag.TotalRoleTitle</span>
+            <span class="info-box-number">
+                @ViewBag.TotalRole
+            </span>
+        </div>
+        <!-- /.info-box-content -->
+    </div>
+    <!-- /.info-box -->
+</div>
+
+<div class="col-xs-6">
+    <div class="info-box">
+        <span class="info-box-icon bg-red"><i class="ion ion-person-stalker"></i></span>
+
+        <div class="info-box-content">
+            <span class="info-box-text">@ViewBag.TotalUserTitle</span>
+            <span class="info-box-number">
+                @ViewBag.TotalUser
+            </span>
+        </div>
+        <!-- /.info-box-content -->
+    </div>
+    <!-- /.info-box -->
+</div>

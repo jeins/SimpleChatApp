@@ -1,0 +1,61 @@
+﻿@model PimSuite.Models.UserModel
+@{
+    ViewBag.Title = "Sign in to start your session";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>PimSuite | Dashboard</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    @Html.Partial("_CssComponents")
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="login-box">
+        <div class="login-logo">
+            @Html.RouteLink("PimSuite", new {action = "Index", controller = "Dashboard"})
+        </div>
+
+        <div class="login-box-body">
+            <p class="login-box-msg">@ViewBag.Title</p>
+
+            @using (Html.BeginForm("Login", "User", FormMethod.Post, new { role = "form" }))
+            {
+                <div class="form-group has-feedback">
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email" })
+                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password" })
+                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                </div>
+                <div class="row">
+                    <div class="col-xs-8">
+                        <div class="checkbox icheck">
+                            <label>
+                                <input type="checkbox"> Remember Me
+                            </label>
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-xs-4">
+                        <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            }
+
+            <a href="#">I forgot my password</a><br>
+            @Html.RouteLink("Register as a new user", new { action = "Register", controller = "User" })
+
+        </div>
+        <!-- /.login-box-body -->
+    </div>
+    @Html.Partial("_JsComponents")
+</body>
+</html>

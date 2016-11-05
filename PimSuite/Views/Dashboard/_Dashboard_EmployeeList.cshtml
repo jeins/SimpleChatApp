@@ -1,0 +1,41 @@
+﻿@model IEnumerable<PimSuite.Models.Users>
+@{
+    ViewBag.Title = "Employee List";
+}
+
+
+
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title">@ViewBag.Title</h3>
+
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+        </div>
+    </div>
+    <div class="box-body">
+        <ul class="products-list product-list-in-box">
+            @foreach (var user in Model)
+            {
+                <li class="item">
+                    <div class="product-img">
+                        <img src="~/Content/img/default-50x50.gif" alt="Product Image">
+                    </div>
+                    <div class="product-info">
+                        <a href="#" class="product-title">
+                            @Html.DisplayFor(model => user.FirstName)
+                            @Html.DisplayFor(model => user.LastName)
+                        </a>
+                        <span class="product-description">
+                            @Html.DisplayFor(model => user.Roles.Name)
+                        </span>
+                    </div>
+                </li>
+                <!-- /.item -->
+            }
+        </ul>
+    </div>
+</div>

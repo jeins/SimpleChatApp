@@ -1,0 +1,27 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    ViewBag.Title = "Dashboard";
+}
+
+
+<section class="content-header">
+    <h1>@ViewBag.Title</h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- Info Boxes -->
+    <div class="row">
+        @Html.Partial("_Dashboard_InfoBox")
+    </div>
+
+    <!-- EmployeeList -->
+    <div class="row">
+        <div class="col-md-12">
+            @Html.Partial("_Dashboard_EmployeeList")
+        </div>
+    </div>
+</section>
+<!-- /.content -->

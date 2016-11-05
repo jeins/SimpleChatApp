@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PimSuite.MVC", "PimSuite\PimSuite.MVC.csproj", "{EF106FE1-470E-48BB-82A5-D3CEFF5B279F}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "PimSuiteDatabase", "PimSuiteDatabase\PimSuiteDatabase.sqlproj", "{123ECCF7-B23C-4494-B481-973DCC820C7C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EF106FE1-470E-48BB-82A5-D3CEFF5B279F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF106FE1-470E-48BB-82A5-D3CEFF5B279F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF106FE1-470E-48BB-82A5-D3CEFF5B279F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF106FE1-470E-48BB-82A5-D3CEFF5B279F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{123ECCF7-B23C-4494-B481-973DCC820C7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{123ECCF7-B23C-4494-B481-973DCC820C7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{123ECCF7-B23C-4494-B481-973DCC820C7C}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{123ECCF7-B23C-4494-B481-973DCC820C7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{123ECCF7-B23C-4494-B481-973DCC820C7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{123ECCF7-B23C-4494-B481-973DCC820C7C}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
