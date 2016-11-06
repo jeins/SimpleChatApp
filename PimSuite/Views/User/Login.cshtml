@@ -1,4 +1,5 @@
-﻿@model PimSuite.Models.UserModel
+﻿@using System.Activities.Statements
+@model PimSuite.Models.Users
 @{
     ViewBag.Title = "Sign in to start your session";
 }
@@ -18,11 +19,18 @@
         <div class="login-logo">
             @Html.RouteLink("PimSuite", new {action = "Index", controller = "Dashboard"})
         </div>
+        @if (ViewBag.ErrorMessage != ""){
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h4><i class="icon fa fa-ban"></i> Alert!</h4>
+            @ViewBag.ErrorMessage
+        </div>
+        }
 
         <div class="login-box-body">
             <p class="login-box-msg">@ViewBag.Title</p>
 
-            @using (Html.BeginForm("Login", "User", FormMethod.Post, new { role = "form" }))
+            @using (Html.BeginForm("Login", "User", FormMethod.Post))
             {
                 <div class="form-group has-feedback">
                     @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email" })
@@ -35,13 +43,6 @@
                     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                 </div>
                 <div class="row">
-                    <div class="col-xs-8">
-                        <div class="checkbox icheck">
-                            <label>
-                                <input type="checkbox"> Remember Me
-                            </label>
-                        </div>
-                    </div>
                     <!-- /.col -->
                     <div class="col-xs-4">
                         <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
@@ -49,9 +50,6 @@
                     <!-- /.col -->
                 </div>
             }
-
-            <a href="#">I forgot my password</a><br>
-            @Html.RouteLink("Register as a new user", new { action = "Register", controller = "User" })
 
         </div>
         <!-- /.login-box-body -->
