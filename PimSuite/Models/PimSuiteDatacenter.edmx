@@ -21,6 +21,14 @@
           <Property Name="Message" Type="ntext" Nullable="false" />
           <Property Name="CreatedAt" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="Connections">
+          <Key>
+            <PropertyRef Name="ConnectionId" />
+          </Key>
+          <Property Name="ConnectionId" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="200" Nullable="false" />
+        </EntityType>
         <EntityType Name="Roles">
           <Key>
             <PropertyRef Name="RoleId" />
@@ -37,6 +45,7 @@
           <Property Name="LastName" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="Email" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="Password" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="IsOnline" Type="int" />
           <Property Name="RoleId" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="FK_ChatToUserId_User">
@@ -75,9 +84,22 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="UserId">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Connections" Type="Self.Connections" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Connections">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="PimSuiteDatabaseModelStoreContainer">
           <EntitySet Name="__RefactorLog" EntityType="Self.__RefactorLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Chats" EntityType="Self.Chats" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Connections" EntityType="Self.Connections" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_ChatToUserId_User" Association="Self.FK_ChatToUserId_User">
@@ -91,6 +113,10 @@
           <AssociationSet Name="FK_UserId_User" Association="Self.FK_UserId_User">
             <End Role="Users" EntitySet="Users" />
             <End Role="Chats" EntitySet="Chats" />
+          </AssociationSet>
+          <AssociationSet Name="UserId" Association="Self.UserId">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Connections" EntitySet="Connections" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -124,6 +150,8 @@
           <NavigationProperty Name="Roles" Relationship="Self.FK_RolesId_Role" FromRole="Users" ToRole="Roles" />
           <NavigationProperty Name="Chats" Relationship="PimSuiteDatabaseModel.FK_ChatToUserId_User" FromRole="Users" ToRole="Chats" />
           <NavigationProperty Name="Chats1" Relationship="PimSuiteDatabaseModel.FK_UserId_User" FromRole="Users" ToRole="Chats" />
+          <Property Name="IsOnline" Type="Int32" />
+          <NavigationProperty Name="Connections" Relationship="PimSuiteDatabaseModel.UserId" FromRole="Users" ToRole="Connections" />
         </EntityType>
         <Association Name="FK_RolesId_Role">
           <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
@@ -153,6 +181,11 @@
           <AssociationSet Name="FK_UserId_User" Association="PimSuiteDatabaseModel.FK_UserId_User">
             <End Role="Users" EntitySet="Users" />
             <End Role="Chats" EntitySet="Chats" />
+          </AssociationSet>
+          <EntitySet Name="Connections" EntityType="PimSuiteDatabaseModel.Connections" />
+          <AssociationSet Name="UserId" Association="PimSuiteDatabaseModel.UserId">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Connections" EntitySet="Connections" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Chats">
@@ -191,6 +224,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Connections">
+          <Key>
+            <PropertyRef Name="ConnectionId" />
+          </Key>
+          <Property Name="ConnectionId" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="FullName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Users" Relationship="PimSuiteDatabaseModel.UserId" FromRole="Connections" ToRole="Users" />
+        </EntityType>
+        <Association Name="UserId">
+          <End Type="PimSuiteDatabaseModel.Users" Role="Users" Multiplicity="1" />
+          <End Type="PimSuiteDatabaseModel.Connections" Role="Connections" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Connections">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -215,6 +269,7 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="PimSuiteDatabaseModel.Users">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="IsOnline" ColumnName="IsOnline" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="LastName" ColumnName="LastName" />
@@ -232,6 +287,15 @@
                 <ScalarProperty Name="ChatToUserId" ColumnName="ChatToUserId" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Connections">
+            <EntityTypeMapping TypeName="PimSuiteDatabaseModel.Connections">
+              <MappingFragment StoreEntitySet="Connections">
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ConnectionId" ColumnName="ConnectionId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

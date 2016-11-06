@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using System.Web.Security;
 using PimSuite.Models;
 
@@ -44,13 +45,18 @@ namespace PimSuite.Controllers
             }
             else
             {
-                string userData = model.FirstName + " " + model.LastName;
+                var serializer = new JavaScriptSerializer();
+                var userData =
+                _db.Users.Where(u => u.Email == model.Email)
+                    .Select(u => new { u.UserId, u.Email, u.FirstName, u.LastName, u.IsOnline, u.RoleId })
+                    .FirstOrDefault();
+                
                 FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(
-                    1, model.Email, DateTime.Now, DateTime.Now.AddMinutes(10), false, userData);
+                    1, model.Email, DateTime.Now, DateTime.Now.AddMinutes(10), false, serializer.Serialize(userData));
 
                 string encryptedTicket = FormsAuthentication.Encrypt(ticket);
                 HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
-//                FormsAuthentication.SetAuthCookie(cookie, false);
+
                 this.Response.Cookies.Add(cookie);
                 return RedirectToAction("Index", "Dashboard");
             }

@@ -1047,6 +1047,9 @@
     <Compile Include="Models\Chats.cs">
       <DependentUpon>PimSuiteDatacenter.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Connections.cs">
+      <DependentUpon>PimSuiteDatacenter.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\C__RefactorLog.cs">
       <DependentUpon>PimSuiteDatacenter.tt</DependentUpon>
     </Compile>

@@ -26,6 +26,8 @@ public partial class Users
 
         this.Chats1 = new HashSet<Chats>();
 
+        this.Connections = new HashSet<Connections>();
+
     }
 
 
@@ -41,6 +43,8 @@ public partial class Users
 
     public int RoleId { get; set; }
 
+    public Nullable<int> IsOnline { get; set; }
+
 
 
     public virtual Roles Roles { get; set; }
@@ -52,6 +56,10 @@ public partial class Users
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
     public virtual ICollection<Chats> Chats1 { get; set; }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
+    public virtual ICollection<Connections> Connections { get; set; }
 
 }
 

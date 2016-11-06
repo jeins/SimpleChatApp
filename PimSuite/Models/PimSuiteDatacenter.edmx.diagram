@@ -12,6 +12,8 @@
         <EntityTypeShape EntityType="PimSuiteDatabaseModel.Chats" Width="1.5" PointX="5.25" PointY="1.25" />
         <AssociationConnector Association="PimSuiteDatabaseModel.FK_ChatToUserId_User" />
         <AssociationConnector Association="PimSuiteDatabaseModel.FK_UserId_User" />
+        <EntityTypeShape EntityType="PimSuiteDatabaseModel.Connections" Width="1.5" PointX="5.25" PointY="4.625" />
+        <AssociationConnector Association="PimSuiteDatabaseModel.UserId" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

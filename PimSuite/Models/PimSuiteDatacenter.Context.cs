@@ -40,6 +40,8 @@ public partial class PimSuiteDatabaseEntities : DbContext
 
     public virtual DbSet<Chats> Chats { get; set; }
 
+    public virtual DbSet<Connections> Connections { get; set; }
+
 }
 
 }
