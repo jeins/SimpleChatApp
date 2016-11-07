@@ -22,11 +22,9 @@ namespace PimSuite.Controllers
         // GET: Dashboard/Index
         public ActionResult Index()
         {
-            var user = GetUserFromCookie();
-
             ViewBag.TotalUser = _db.Users.Count();
             ViewBag.TotalRole = _db.Roles.Count();
-            ViewBag.UserName = user.FirstName + " " + user.LastName;
+            SetupInformationForDashboard();
 
             var users = _db.Users.Include("Roles");
 
@@ -36,10 +34,7 @@ namespace PimSuite.Controllers
         // GET: Dashboard/Chat
         public ActionResult Chat()
         {
-            var user = GetUserFromCookie();
-
-            ViewBag.FullName = user.FirstName + " " + user.LastName;
-            ViewBag.UserId = user.UserId;
+            SetupInformationForDashboard();
 
             return View();
         }
@@ -53,6 +48,16 @@ namespace PimSuite.Controllers
             var user = (Users) serializer.Deserialize(authTicket.UserData, typeof(Users));
 
             return user;
+        }
+
+
+        private void SetupInformationForDashboard()
+        {
+            var user = GetUserFromCookie();
+
+            ViewBag.UserId = user.UserId;
+            ViewBag.Email = user.Email;
+            ViewBag.FullName = user.FirstName + " " + user.LastName;
         }
     }
 }
