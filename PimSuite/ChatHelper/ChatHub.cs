@@ -24,7 +24,7 @@ namespace PimSuite.ChatHelper
         {
             var id = Context.ConnectionId;
 
-            if (!ifConnectionIdExist(id))
+            if (!isUserIdExist(userId))
             {
                 var connection = new Connections
                 {
@@ -35,22 +35,32 @@ namespace PimSuite.ChatHelper
                 _db.Connections.Add(connection);
                 _db.SaveChanges();
             }
+            else
+            {
+                var connection = _db.Connections.SingleOrDefault(u => u.UserId == userId);
+                if (connection != null)
+                {
+                    connection.ConnectionId = id;
+                    _db.SaveChanges();
+                }
+            }
 
-            var curConnectedUser = _db.Connections.FirstOrDefault(u => u.ConnectionId == id);
-
-            Clients.Caller.onConnected(curConnectedUser.UserId.ToString(), curConnectedUser.FullName, curConnectedUser.ConnectionId);
+            Clients.Caller.onConnected(userId, fullName, id);
         }
 
         public void SendPrivateMessage(int toUserId, string message)
         {
-            var fromUser =
-                _db.Connections.FirstOrDefault(u => u.ConnectionId == Context.ConnectionId);
+            var fromUser = _db.Connections.FirstOrDefault(u => u.ConnectionId == Context.ConnectionId);
 
             var toUser = _db.Connections.FirstOrDefault(u => u.UserId == toUserId);
+            var dateNow = DateTime.Now;
 
-            Clients.Client(toUser.ConnectionId).sendPrivateMessage(fromUser.UserId, fromUser.FullName, message);
-            Clients.Client(fromUser.ConnectionId).sendPrivateMessage(toUser.UserId, toUser.FullName, message);
+//            Clients.Client(fromUser.ConnectionId).sendPrivateMessage(toUser.UserId, toUser.FullName, message);
+//            Clients.Client(toUser.ConnectionId).sendPrivateMessage(fromUser.UserId, fromUser.FullName, message);
 
+            Clients.Client(toUser.ConnectionId).sendPrivateMessage(fromUser.FullName, message, dateNow, "receiver");
+            Clients.Client(fromUser.ConnectionId).sendPrivateMessage(fromUser.FullName, message, dateNow, "sender");
+            
             var chat = new Chats
             {
                 UserId = fromUser.UserId,
@@ -58,14 +68,14 @@ namespace PimSuite.ChatHelper
                 Message = message,
                 CreatedAt = DateTime.Now
             };
-
+            
             _db.Chats.Add(chat);
             _db.SaveChanges();
         }
 
-        private bool ifConnectionIdExist(string connectionId)
+        private bool isUserIdExist(int userId)
         {
-            var count = _db.Connections.Count(u => u.ConnectionId == connectionId);
+            var count = _db.Connections.Count(u => u.UserId == userId);
             if (count > 0)
                 return true;
             return false;

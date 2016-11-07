@@ -23,8 +23,9 @@
         </EntityType>
         <EntityType Name="Connections">
           <Key>
-            <PropertyRef Name="ConnectionId" />
+            <PropertyRef Name="Id" />
           </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ConnectionId" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="UserId" Type="int" Nullable="false" />
           <Property Name="FullName" Type="nvarchar" MaxLength="200" Nullable="false" />
@@ -226,8 +227,9 @@
         </Association>
         <EntityType Name="Connections">
           <Key>
-            <PropertyRef Name="ConnectionId" />
+            <PropertyRef Name="Id" />
           </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ConnectionId" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="UserId" Type="Int32" Nullable="false" />
           <Property Name="FullName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
@@ -296,6 +298,7 @@
                 <ScalarProperty Name="FullName" ColumnName="FullName" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="ConnectionId" ColumnName="ConnectionId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

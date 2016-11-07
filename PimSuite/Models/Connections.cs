@@ -18,6 +18,8 @@ using System;
 public partial class Connections
 {
 
+    public int Id { get; set; }
+
     public string ConnectionId { get; set; }
 
     public int UserId { get; set; }
