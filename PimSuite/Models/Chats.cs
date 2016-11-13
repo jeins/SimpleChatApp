@@ -22,8 +22,6 @@ public partial class Chats
 
     public int UserId { get; set; }
 
-    public int ChatToUserId { get; set; }
-
     public string Message { get; set; }
 
     public System.DateTime CreatedAt { get; set; }
@@ -31,8 +29,6 @@ public partial class Chats
 
 
     public virtual Users Users { get; set; }
-
-    public virtual Users Users1 { get; set; }
 
 }
 

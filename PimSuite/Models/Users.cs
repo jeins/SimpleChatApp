@@ -22,11 +22,9 @@ public partial class Users
     public Users()
     {
 
-        this.Chats = new HashSet<Chats>();
-
-        this.Chats1 = new HashSet<Chats>();
-
         this.Connections = new HashSet<Connections>();
+
+        this.Chats = new HashSet<Chats>();
 
     }
 
@@ -51,15 +49,11 @@ public partial class Users
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
-    public virtual ICollection<Chats> Chats { get; set; }
-
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-
-    public virtual ICollection<Chats> Chats1 { get; set; }
-
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-
     public virtual ICollection<Connections> Connections { get; set; }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
+    public virtual ICollection<Chats> Chats { get; set; }
 
 }
 
