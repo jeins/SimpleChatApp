@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
 using PimSuite.Models;
 
@@ -15,16 +15,31 @@ namespace PimSuite.ChatHelper
             _db = new PimSuiteDatabaseEntities();
         }
 
-        public void Send(string name, string message)
+        public void SendMessage(int fromUserId, string message)
         {
-            Clients.All.addNewMessageToPage(name, message);
+            var user = _db.Connections.FirstOrDefault(u => u.UserId == fromUserId);
+            var date = DateTime.Now.ToString("g");
+            
+            Clients.Others.addNewMessageFrom(user.FullName, message, date, "receiver");
+            Clients.Client(Context.ConnectionId).addUserMessage(user.FullName, message, date, "sender");
+            
+            var chat = new Chats
+            {
+                UserId = fromUserId,
+                Message = message,
+                CreatedAt = DateTime.Now
+            };
+
+            _db.Chats.Add(chat);
+            _db.SaveChanges();
         }
 
         public void Connect(string fullName, int userId)
         {
             var id = Context.ConnectionId;
+            var users = _db.Connections.Where(u=>u.UserId != userId).Select(u => u.FullName);
 
-            if (!isUserIdExist(userId))
+            if (!IsUserIdExist(userId))
             {
                 var connection = new Connections
                 {
@@ -45,35 +60,51 @@ namespace PimSuite.ChatHelper
                 }
             }
 
-            Clients.Caller.onConnected(userId, fullName, id);
+            Clients.Caller.onConnected(users);
+            Clients.Caller.loadChatHistory(GetChatHistory(userId));
+            Clients.AllExcept(id).onNewUserConnected(userId, fullName);
         }
 
-        public void SendPrivateMessage(int toUserId, string message)
+        private List<string[]> GetChatHistory(int userId)
         {
-            var fromUser = _db.Connections.FirstOrDefault(u => u.ConnectionId == Context.ConnectionId);
+            var chatsHistory = new List<string[]>();
+            var tmpChatsHistory = _db.Chats.Select(c => new { c.UserId ,c.Users.FirstName, c.Users.LastName, c.Message, c.CreatedAt }).ToList();
 
-            var toUser = _db.Connections.FirstOrDefault(u => u.UserId == toUserId);
-            var dateNow = DateTime.Now;
-
-//            Clients.Client(fromUser.ConnectionId).sendPrivateMessage(toUser.UserId, toUser.FullName, message);
-//            Clients.Client(toUser.ConnectionId).sendPrivateMessage(fromUser.UserId, fromUser.FullName, message);
-
-            Clients.Client(toUser.ConnectionId).sendPrivateMessage(fromUser.FullName, message, dateNow, "receiver");
-            Clients.Client(fromUser.ConnectionId).sendPrivateMessage(fromUser.FullName, message, dateNow, "sender");
-            
-            var chat = new Chats
+            foreach (var chat in tmpChatsHistory)
             {
-                UserId = fromUser.UserId,
-                ChatToUserId = toUserId,
-                Message = message,
-                CreatedAt = DateTime.Now
-            };
-            
-            _db.Chats.Add(chat);
-            _db.SaveChanges();
+                var senderOrReceiver = (chat.UserId == userId) ? "sender" : "receiver";
+                var arr = new string[]
+                {
+                    chat.FirstName + " " + chat.LastName,
+                    chat.Message,
+                    chat.CreatedAt.ToString("g"),
+                    senderOrReceiver
+                };
+
+                chatsHistory.Add(arr);
+            }
+
+            return chatsHistory;
         }
 
-        private bool isUserIdExist(int userId)
+        public override Task OnDisconnected(bool stopCalled)
+        {
+            var connection = _db.Connections.FirstOrDefault(c => c.ConnectionId == Context.ConnectionId);
+            if (connection != null)
+            {
+                var userId = connection.UserId;
+                var fullName = connection.FullName;
+
+                _db.Connections.Remove(connection);
+                _db.SaveChanges();
+
+                Clients.All.onUserDisconnected(userId);
+            }
+
+            return base.OnDisconnected(stopCalled);
+        }
+
+        private bool IsUserIdExist(int userId)
         {
             var count = _db.Connections.Count(u => u.UserId == userId);
             if (count > 0)
